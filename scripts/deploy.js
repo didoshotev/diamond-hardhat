@@ -49,14 +49,15 @@ async function deployDiamond () {
 
   // upgrade diamond with facets
   console.log('')
-//   console.log('Diamond Cut:', cut)
   const diamondCut = await ethers.getContractAt('IDiamondCut', diamond.address)
   let tx
   let receipt
   // call to init function
-  let functionCall = diamondInit.interface.encodeFunctionData('init')
+  // gets bytes calldata _calldata
+  let functionCall = diamondInit.interface.encodeFunctionData('init');
+  console.log('functionCall: ', functionCall);
   tx = await diamondCut.diamondCut(cut, diamondInit.address, functionCall)
-  console.log('Diamond cut tx: ', tx.hash)
+//   console.log('Diamond cut tx: ', tx.hash)
   receipt = await tx.wait()
   if (!receipt.status) {
     throw Error(`Diamond upgrade failed: ${tx.hash}`)
